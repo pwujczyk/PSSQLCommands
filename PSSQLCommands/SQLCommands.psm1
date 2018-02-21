@@ -104,11 +104,11 @@ function New-SQLTable()
 function Test-SQLColumn()
 {
 	[cmdletbinding()]
-	param ([string]$SqlInstance, [string]$DatabaseName, [string]$Schema="dbo",[string]$TableName, [string]$Name, [string]$Type)
+	param ([string]$SqlInstance, [string]$DatabaseName, [string]$Schema="dbo",[string]$TableName, [string]$ColumnName, [string]$Type)
 
 	$query="IF EXISTS(SELECT TOP 1 * FROM INFORMATION_SCHEMA.COLUMNS 
 			WHERE [TABLE_NAME] = '$TableName'
-			AND [COLUMN_NAME] = '$Name'
+			AND [COLUMN_NAME] = '$ColumnName'
 			AND [TABLE_SCHEMA] = '$Schema')
 			BEGIN
 				SELECT 1
@@ -163,6 +163,66 @@ function New-SqlColumn()
 
 }
 
+
+function Test-SqlSchema()
+{
+	[cmdletbinding()]
+	param ([string]$SqlInstance, [string]$DatabaseName, [string]$SchemaName)
+
+	$query="IF EXISTS (SELECT TOP 1 * FROM sys.schemas WHERE name = '$SchemaName')
+			BEGIN
+				SELECT 1
+			END
+			else
+			begin
+				select 0
+			end"
+	
+	$r=InvokeQuery -SqlInstance $SqlInstance -DatabaseName $DatabaseName -Query $query 
+	if ($r[0] -eq 1)
+	{
+		return $true
+	}
+	else {
+		return $false
+	}
+}
+
+function Drop-SqlSchema()
+{
+	[cmdletbinding()]
+	param ([string]$SqlInstance, [string]$DatabaseName, [string]$SchemaName, [string]$TableName)
+
+	Write-Verbose "Drop-SqlSchema command invoked"
+
+	$test=Test-SqlSchema -SqlInstance $SqlInstance -DatabaseName $DatabaseName -SchemaName $SchemaName  
+
+	if ($test)
+	{
+		$query="DROP SCHEMA $SchemaName"
+		InvokeQuery -SqlInstance $SqlInstance -DatabaseName $DatabaseName -Query $query 
+	}
+	else {
+		Write-Verbose "Schema $SchemaName in table $TableName in the Database $DatabaseName on the Instance $SqlInstance not exists"
+	}
+	Write-Verbose "Drop-SqlSchema command finished"
+}
+
+function New-SqlSchema()
+{
+	[cmdletbinding()]
+	param ([string]$SqlInstance, [string]$DatabaseName, [string]$SchemaName="dbo",[string]$TableName, [string]$ColumnName, [string]$Type,[switch]$Force)
+	
+	if ($Force -eq $true)
+	{
+		Drop-SqlSchema -SqlInstance $SqlInstance -DatabaseName $DatabaseName -SchemaName $SchemaName
+	}
+	
+	$query="CREATE SCHEMA $SchemaName"
+	InvokeQuery -SqlInstance $SqlInstance -DatabaseName $DatabaseName -Query $query 
+
+}
+
 function InvokeQuery([string]$SqlInstance,[string]$DatabaseName,[string]$Query)
 {
 	Write-Verbose -Message "On the $SqlInstance Instance in the $DatabaseName Database following query executed:"
@@ -170,11 +230,12 @@ function InvokeQuery([string]$SqlInstance,[string]$DatabaseName,[string]$Query)
 
 	if ($DatabaseName -eq $null -or $DatabaseName -eq "")
 	{
-		$r= return Invoke-Sqlcmd -ServerInstance $SqlInstance -Query $query
+		$r = return Invoke-Sqlcmd -ServerInstance $SqlInstance -Query $query
+		return $r
 	}
 	else
 	{
-		$r= (Invoke-Sqlcmd -ServerInstance $SqlInstance -Database $DatabaseName -Query $query)
+		$r = (Invoke-Sqlcmd -ServerInstance $SqlInstance -Database $DatabaseName -Query $query)
 		return $r;
 	}
 }
