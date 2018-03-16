@@ -29,7 +29,6 @@
   <ItemGroup>
     <Compile Include="SQLCommands.psd1" />
     <Compile Include="SQLCommands.psm1" />
-    <Compile Include="SQLCommands.tests.ps1" />
     <Compile Include="Runner.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

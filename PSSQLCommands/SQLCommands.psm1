@@ -12,7 +12,7 @@ function Test-SQLDatabase()
 				select 0
 			end"
 	
-	$r=Invoke-SQLQuery -SqlInstance $SqlInstance -DatabaseName $DatabaseName -Query $query 
+	$r=Invoke-SQLQuery -SqlInstance $SqlInstance -Query $query 
 	if ($r[0] -eq 1)
 	{
 		return $true
@@ -136,7 +136,7 @@ function New-SQLTable()
 		Drop-SQLTable -SqlInstance $SqlInstance -DatabaseName $DatabaseName -SchemaName $SchemaName -TableName $TableName
 	}
 	
-	New-SqlSchema -SqlInstance $SqlInstance -DatabaseName $DatabaseName -SchemaName $SchemaName -Verbose
+	New-SqlSchema -SqlInstance $SqlInstance -DatabaseName $DatabaseName -SchemaName $SchemaName
 
 	$id=$TableName+"Id"
 	$query="CREATE TABLE [$SchemaName].[$TableName]($id INT IDENTITY(1,1) PRIMARY KEY)"
@@ -300,3 +300,18 @@ function Ivoke-SQLScripts()
 		Invoke-Sqlcmd -ServerInstance $SqlInstance -Database $DatabaseName -InputFile $sql	
 	}
 }
+
+ Export-Modulemember Test-SQLDatabase
+ Export-Modulemember Drop-SQLDatabase 
+ Export-Modulemember New-SQLDatabase
+ Export-Modulemember Test-SQLTable
+ Export-Modulemember Drop-SQLTable
+ Export-Modulemember New-SQLTable
+ Export-Modulemember Test-SQLColumn
+ Export-Modulemember Drop-SQLColumn
+ Export-Modulemember New-SqlColumn
+ Export-Modulemember Test-SqlSchema
+ Export-Modulemember Drop-SqlSchema
+ Export-Modulemember New-SqlSchema
+ Export-Modulemember Invoke-SQLQuery
+ Export-Modulemember Ivoke-SQLScripts
