@@ -1,0 +1,2 @@
+https://stackoverflow.com/questions/39599672/how-to-query-sql-server-using-powershell/51004541#51004541
+https://stackoverflow.com/questions/8048822/is-it-possible-to-create-a-database-in-sql-server-with-powershell/49340976#49340976

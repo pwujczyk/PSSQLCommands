@@ -24,4 +24,4 @@ Methods are protected against invoking them twice. So before adding column, chec
 * Invoke-SQLQuery – ivokes query
 * Ivoke-SQLScripts  – it takes all scripts from given directory and invoke them one by one
 
-More information on the page: http://www.productivitytools.tech/sql-commands-in-powershell/
+
