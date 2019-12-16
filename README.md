@@ -1,3 +1,13 @@
+
+<p align="right">
+ <a href="https://www.powershellgallery.com/packages/ProductivityTools.PSSQLCommands/">
+  <img src="http://cdn.productivitytools.tech/Powershell40px.png" /></a>
+<a href="http://www.productivitytools.tech/sql-commands/">
+<img src="http://cdn.productivitytools.tech/Blog40px.png" /><a>
+</p>
+
+# ProductivityTools.PSSQLCommands
+
 Module helps to perform basic operations on the SQL Server. It wraps SQL queries into methods. Using this module instead of invoking query:
 
 `CREATE TABLE [schema].[TableName] (TableNameId INT IDENTITY(1,1) PRIMARY KEY`
@@ -23,5 +33,3 @@ Methods are protected against invoking them twice. So before adding column, chec
 * New-SqlSchema – create new schema
 * Invoke-SQLQuery – ivokes query
 * Ivoke-SQLScripts  – it takes all scripts from given directory and invoke them one by one
-
-
