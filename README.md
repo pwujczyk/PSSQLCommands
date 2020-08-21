@@ -11,7 +11,7 @@
 </p>
 
 
-# ProductivityTools.PSSQLCommands
+# Powershell SQL Commands
 
 The module helps to perform basic operations on the SQL Server. It wraps SQL queries into methods making basic SQL operation more convenient.
 
@@ -69,8 +69,8 @@ Import-Module SQLCommands
 The following picture shows the possible option of the database creation with one table and one column
 
 <!--og-image-->
-![PowerOptions](Images/Commands.png)
+![Powershell SQL Commands](Images/Commands.png)
 
 Commands will result in the following structure:
 
-![PowerOptions](Images/Database.png)
+![Managment studio](Images/Database.png)
