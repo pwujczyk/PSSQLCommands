@@ -13,8 +13,9 @@
 
 # ProductivityTools.PSSQLCommands
 
-Module helps to perform basic operations on the SQL Server. It wraps SQL queries into methods making basic SQL operation more convenient.
+The module helps to perform basic operations on the SQL Server. It wraps SQL queries into methods making basic SQL operation more convenient.
 
+<!--more-->
 
 Using this module instead of invoking query:
 
@@ -22,29 +23,29 @@ Using this module instead of invoking query:
 CREATE TABLE [schema].[TableName] (TableNameId INT IDENTITY(1,1) PRIMARY KEY
 ```
 
-We can use method
+We can use the method
 
 ```Powershell
 New-SQLTable -SqlInstance "localhost" -DatabaseName "TableName" -SchemaName "schema"
 ```
 
-Methods are protected against invoking them twice. So before adding column, checks is performed if column doesn’t already exist.
+Methods are protected against invoking them twice. So before adding a column, check is performed if the column doesn’t already exist.
 
-- Test-SQLDatabase – checks if database exists returns $true or false
-- Drop-SQLDatabase – drop database if exists. If database not exist nothing happens. If -Verbose parameter used information showed about this fact on the screen.
-- New-SQLDatabase – create database if database exists nothing is done. If -Force parameter is used, before create Drop-SqlDatabase is invoked
-- Test-SQLTable – checks if table with given name and schema exists
-- Drop-SQLTable – drops table if table doesn’t exist nothing happens
-- New-SQLTable – create new table if -Force is used first Drop-SQLTable is invoked. If used schema doesn’t exist it will be created (New-SQLSchema is invoked) Table is created only with primary key and one column Add-SQLColumn can be combined to create full table
-- Test-SQLColumn – checks if column exists
-- Drop-SQLColumn – drops column if column doesn’t exist nothing happen
-- New-SQLColumn – create new column if -Force parameter is used Drop-SQL Column is invoked before creation
+- Test-SQLDatabase – checks if the database exists returns $true or false
+- Drop-SQLDatabase – drop database if exists. If the database does not exist nothing happens. If -Verbose parameter used information showed about this fact on the screen.
+- New-SQLDatabase – create the database. If database exists nothing is done. If -Force parameter is used, before create Drop-SqlDatabase is invoked
+- Test-SQLTable – checks if the table with given name and schema exists
+- Drop-SQLTable – drops table if the table doesn’t exist nothing happens
+- New-SQLTable – create a new table if -Force is used first Drop-SQLTable is invoked. If the used schema doesn’t exist it will be created (New-SQLSchema is invoked) Table is created only with primary key and one column Add-SQLColumn can be combined to create full table
+- Test-SQLColumn – checks if the column exists
+- Drop-SQLColumn – drops column if the column doesn’t exist nothing happen
+- New-SQLColumn – create new column if -Force parameter is used Drop-SQL Column is invoked before the creation
 - Test-SqlSchema – checks if schema exists
-- Drop-SqlSchema – drops schema if schema doesn’t exist nothing happen
-- New-SqlSchema – create new schema
-- Invoke-SQLQuery – invokes query
-- Invoke-SQLScripts  – it takes all scripts from given directory and invoke them one by one
-Module is dependent on the SQL module (as written in the RequiredModules section.
+- Drop-SqlSchema – drops schema. If the schema doesn’t exist nothing happen
+- New-SqlSchema – create a new schema
+- Invoke-SQLQuery – invokes a query
+- Invoke-SQLScripts  – it takes all scripts from a given directory and invokes them one by one
+The module is dependent on the SQL module (as written in the RequiredModules section.
 
 ```
 RequiredModules = @("SqlServer")
@@ -65,4 +66,11 @@ Remove-Module SQLPS
 Import-Module SQLCommands
 ```
 
-Following picture shows possible option of the database creation with one table and one column
+The following picture shows the possible option of the database creation with one table and one column
+
+<!--og-image-->
+![PowerOptions](Images/Commands.png)
+
+Commands will result in the following structure:
+
+![PowerOptions](Images/Database.png)
