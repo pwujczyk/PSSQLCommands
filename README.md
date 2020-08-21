@@ -1,10 +1,15 @@
-
-<p align="right">
- <a href="https://www.powershellgallery.com/packages/ProductivityTools.PSSQLCommands/">
-  <img src="http://cdn.productivitytools.tech/Powershell40px.png" /></a>
-<a href="http://www.productivitytools.tech/sql-commands/">
-<img src="http://cdn.productivitytools.tech/Blog40px.png" /><a>
+<!--Category:PowerShell,SQL--> 
+ <p align="right">
+    <a href="https://www.powershellgallery.com/packages/ProductivityTools.PSSQLCommands/"><img src="Images/Header/Powershell_border_40px.png" /></a>
+    <a href="http://productivitytools.tech/sql-commands/"><img src="Images/Header/ProductivityTools_green_40px_2.png" /><a> 
+    <a href="https://github.com/pwujczyk/ProductivityTools.PSSQLCommands"><img src="Images/Header/Github_border_40px.png" /></a>
 </p>
+<p align="center">
+    <a href="http://http://productivitytools.tech/">
+        <img src="Images/Header/LogoTitle_green_500px.png" />
+    </a>
+</p>
+
 
 # ProductivityTools.PSSQLCommands
 
