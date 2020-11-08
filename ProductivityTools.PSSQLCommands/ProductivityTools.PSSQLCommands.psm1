@@ -411,7 +411,7 @@ function Invoke-SQLQuery()
 	[Parameter(Mandatory=$true)]
 	[string]$SqlInstance,
 	
-	[Parameter(Mandatory=$true)]
+	[Parameter(Mandatory=$false)]
 	[string]$DatabaseName,
 	
 	[Parameter(Mandatory=$true)]
