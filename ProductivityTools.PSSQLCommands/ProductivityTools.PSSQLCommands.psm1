@@ -1,7 +1,12 @@
 function Test-SQLDatabase()
 {
 	[cmdletbinding()]
-	param ([string]$SqlInstance, [string]$DatabaseName)
+	param (
+	[Parameter(Mandatory=$true)]
+	[string]$SqlInstance, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$DatabaseName)
 
 	$query="IF EXISTS (SELECT name FROM master.sys.databases WHERE name = N'$DatabaseName')
 			BEGIN
@@ -25,7 +30,12 @@ function Test-SQLDatabase()
 function Drop-SQLDatabase()
 {
 	[cmdletbinding()]
-	param ([string]$SqlInstance,[string]$DatabaseName)
+	param (
+	[Parameter(Mandatory=$true)]
+	[string]$SqlInstance,
+	
+	[Parameter(Mandatory=$true)]
+	[string]$DatabaseName)
 
 	Write-Verbose "Drop-Database command invoked"
 
@@ -47,10 +57,45 @@ function Drop-SQLDatabase()
 	Write-Verbose "Drop-Database command finished"
 }
 
+function CreateDatabase()
+{
+	[cmdletbinding()]
+	param([string]$SqlInstance,[string]$DatabaseName,[string]$Path)
+	
+	if ($Path -eq "")
+	{
+		$query= "CREATE DATABASE $DatabaseName"
+	}
+	else
+	{
+		$logName=$DatabaseName+"_log"
+
+		$query= "CREATE DATABASE $DatabaseName
+ 				CONTAINMENT = NONE
+ 				ON  PRIMARY 
+				( NAME = N'$DatabaseName', FILENAME = N'$Path\$DatabaseName.mdf' , SIZE = 5120KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
+ 				LOG ON 
+				( NAME = N'$logName', FILENAME = N'$Path\$logName.ldf' , SIZE = 1792KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+				GO"
+	}
+	
+	Invoke-SQLQuery -SqlInstance $SqlInstance -Query $query 
+}
+
 function New-SQLDatabase()
 {
 	[cmdletbinding()]
-	param([string]$SqlInstance,[string]$DatabaseName,[string]$Path,[switch]$Force)
+	param(
+	[Parameter(Mandatory=$true)]
+	[string]$SqlInstance,
+	
+	[Parameter(Mandatory=$true)]
+	[string]$DatabaseName,
+	
+	[Parameter(Mandatory=$false)]
+	[string]$Path,
+	
+	[switch]$Force)
 
 	Write-Verbose "New-Database command invoked"
 
@@ -66,16 +111,7 @@ function New-SQLDatabase()
 	}
 	else
 	{
-		$logName=$DatabaseName+"_log"
-
-		$query= "CREATE DATABASE $DatabaseName
- 				CONTAINMENT = NONE
- 				ON  PRIMARY 
-				( NAME = N'$DatabaseName', FILENAME = N'$Path\$DatabaseName.mdf' , SIZE = 5120KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
- 				LOG ON 
-				( NAME = N'$logName', FILENAME = N'$Path\$logName.ldf' , SIZE = 1792KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
-				GO"
-		Invoke-SQLQuery -SqlInstance $SqlInstance -Query $query 
+		CreateDatabase -SqlInstance $SqlInstance -DatabaseName $DatabaseName -Path $Path
 	}
 	Write-Verbose "New-Database command finished"
 }
@@ -83,7 +119,17 @@ function New-SQLDatabase()
 function Test-SQLTable()
 {
 	[cmdletbinding()]
-	param ([string]$SqlInstance, [string]$DatabaseName, [string]$SchemaName="dbo", [string]$TableName)
+	param (
+	[Parameter(Mandatory=$true)]
+	[string]$SqlInstance, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$DatabaseName, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$TableName,
+	
+	[string]$SchemaName="dbo")
 
 	$query="IF (EXISTS (SELECT TOP 1 * FROM INFORMATION_SCHEMA.TABLES 
 				WHERE TABLE_SCHEMA = '$SchemaName' AND  TABLE_NAME = '$TableName'))
@@ -108,7 +154,17 @@ function Test-SQLTable()
 function Drop-SQLTable()
 {
 	[cmdletbinding()]
-	param ([string]$SqlInstance, [string]$DatabaseName, [string]$SchemaName="dbo", [string]$TableName)
+	param (
+	[Parameter(Mandatory=$true)]
+	[string]$SqlInstance, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$DatabaseName, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$TableName,
+	
+	[string]$SchemaName="dbo")
 
 	Write-Verbose "Drop-SQLTable command invoked"
 
@@ -128,7 +184,19 @@ function Drop-SQLTable()
 function New-SQLTable()
 {
 	[cmdletbinding()]
-	param ([string]$SqlInstance, [string]$DatabaseName, [string]$SchemaName="dbo", [string]$TableName,[switch]$Force)
+	param (
+	[Parameter(Mandatory=$true)]
+	[string]$SqlInstance, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$DatabaseName, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$TableName,
+	
+	[string]$SchemaName="dbo", 
+	
+	[switch]$Force)
 	Write-Verbose "New-SQLTable command invoked"
 
 	if ($Force -eq $true)
@@ -147,7 +215,23 @@ function New-SQLTable()
 function Test-SQLColumn()
 {
 	[cmdletbinding()]
-	param ([string]$SqlInstance, [string]$DatabaseName, [string]$SchemaName="dbo",[string]$TableName, [string]$ColumnName, [string]$Type)
+	param (
+	[Parameter(Mandatory=$true)]
+	[string]$SqlInstance, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$DatabaseName, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$TableName, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$ColumnName, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$Type,
+	
+	[string]$SchemaName="dbo")
 
 	$query="IF EXISTS(SELECT TOP 1 * FROM INFORMATION_SCHEMA.COLUMNS 
 			WHERE [TABLE_NAME] = '$TableName'
@@ -174,7 +258,21 @@ function Test-SQLColumn()
 function Drop-SQLColumn()
 {
 	[cmdletbinding()]
-	param ([string]$SqlInstance, [string]$DatabaseName, [string]$SchemaName="dbo",[string]$TableName, [string]$ColumnName, [string]$Type)
+	param (
+	[Parameter(Mandatory=$true)]
+	[string]$SqlInstance, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$DatabaseName, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$TableName, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$ColumnName, 
+	
+	[string]$SchemaName="dbo"
+	)
 
 	Write-Verbose "Drop-Column command invoked"
 
@@ -194,7 +292,24 @@ function Drop-SQLColumn()
 function New-SqlColumn()
 {
 	[cmdletbinding()]
-	param ([string]$SqlInstance, [string]$DatabaseName, [string]$SchemaName="dbo",[string]$TableName, [string]$ColumnName, [string]$Type,[switch]$Force)
+	param (
+	[Parameter(Mandatory=$true)]
+	[string]$SqlInstance, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$DatabaseName, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$TableName, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$ColumnName, 
+	[Parameter(Mandatory=$true)]
+	[string]$Type,
+	
+	[string]$SchemaName="dbo",
+	
+	[switch]$Force)
 	
 	if ($Force -eq $true)
 	{
@@ -208,7 +323,15 @@ function New-SqlColumn()
 function Test-SqlSchema()
 {
 	[cmdletbinding()]
-	param ([string]$SqlInstance, [string]$DatabaseName, [string]$SchemaName)
+	param (
+	[Parameter(Mandatory=$true)]
+	[string]$SqlInstance, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$DatabaseName, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$SchemaName)
 
 	$query="IF EXISTS (SELECT TOP 1 * FROM sys.schemas WHERE name = '$SchemaName')
 			BEGIN
@@ -232,7 +355,15 @@ function Test-SqlSchema()
 function Drop-SqlSchema()
 {
 	[cmdletbinding()]
-	param ([string]$SqlInstance, [string]$DatabaseName, [string]$SchemaName)
+	param (
+	[Parameter(Mandatory=$true)]
+	[string]$SqlInstance, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$DatabaseName, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$SchemaName)
 
 	Write-Verbose "Drop-SqlSchema command invoked"
 
@@ -252,7 +383,14 @@ function Drop-SqlSchema()
 function New-SqlSchema()
 {
 	[cmdletbinding()]
-	param ([string]$SqlInstance, [string]$DatabaseName, [string]$SchemaName="dbo")
+	param (
+	[Parameter(Mandatory=$true)]
+	[string]$SqlInstance, 
+	
+	[Parameter(Mandatory=$true)]
+	[string]$DatabaseName, 
+	
+	[string]$SchemaName="dbo")
 	
 	$test=Test-SqlSchema -SqlInstance $SqlInstance -DatabaseName $DatabaseName -SchemaName $SchemaName  
 	if ($test)
@@ -269,7 +407,15 @@ function New-SqlSchema()
 function Invoke-SQLQuery()
 {
 	[cmdletbinding()]
-	param ([string]$SqlInstance,[string]$DatabaseName,[string]$Query)
+	param (
+	[Parameter(Mandatory=$true)]
+	[string]$SqlInstance,
+	
+	[Parameter(Mandatory=$true)]
+	[string]$DatabaseName,
+	
+	[Parameter(Mandatory=$true)]
+	[string]$Query)
 	
 
 	Write-Verbose -Message "On the $SqlInstance Instance in the $DatabaseName Database following query executed:"
@@ -290,7 +436,15 @@ function Invoke-SQLQuery()
 function Ivoke-SQLScripts()
 {
 	[cmdletbinding()]
-	param ([string]$SqlInstance,[string]$DatabaseName,[string]$Directory)
+	param (
+	[Parameter(Mandatory=$true)]
+	[string]$SqlInstance,
+	
+	[Parameter(Mandatory=$true)]
+	[string]$DatabaseName,
+	
+	[Parameter(Mandatory=$true)]
+	[string]$Directory)
 	
 	$path="$directory\*.sql"
 	$sqlFiles=Get-ChildItem -Path $path
