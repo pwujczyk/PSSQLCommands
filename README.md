@@ -1,8 +1,8 @@
 <!--Category:PowerShell,SQL--> 
  <p align="right">
-    <a href="https://www.powershellgallery.com/packages/ProductivityTools.PSSQLCommands/"><img src="Images/Header/Powershell_border_40px.png" /></a>
+    <a href="https://www.powershellgallery.com/packages/ProductivityTools.SQLCommands/"><img src="Images/Header/Powershell_border_40px.png" /></a>
     <a href="http://productivitytools.tech/sql-commands/"><img src="Images/Header/ProductivityTools_green_40px_2.png" /><a> 
-    <a href="https://github.com/pwujczyk/ProductivityTools.PSSQLCommands"><img src="Images/Header/Github_border_40px.png" /></a>
+    <a href="https://github.com/pwujczyk/ProductivityTools.SQLCommands"><img src="Images/Header/Github_border_40px.png" /></a>
 </p>
 <p align="center">
     <a href="http://http://productivitytools.tech/">
